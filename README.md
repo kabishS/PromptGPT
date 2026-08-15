@@ -18,50 +18,6 @@ PromptGPT/
     └── .gitignore            → excludes server/.env and node_modules from git
 ```
 
-## Running it
-
-This project now has two parts: the **backend proxy** (holds the real API key) and the **frontend** (static files, no key inside them).
-
-### 1. Start the backend proxy
-
-```bash
-cd server
-npm install
-cp .env.example .env
-```
-
-Open the new `.env` file and paste your real Groq key:
-
-```
-GROQ_API_KEY=gsk_your_real_key_here
-```
-
-Then start the server:
-
-```bash
-npm start
-```
-
-You should see:
-
-```
-PromptGPT backend proxy listening on http://localhost:3001
-```
-
-Requires **Node.js 18+** (for built-in `fetch`).
-
-### 2. Open the frontend
-
-Serve `index.html`, `style.css`, and `script.js` from the project root with any static server (or a "Live Server" extension), e.g.:
-
-```bash
-npx serve .
-```
-
-Then open the URL it gives you in the browser. `script.js` calls the backend at `http://localhost:3001` by default — see `BACKEND_URL` near the top of `script.js` if you need to change that (e.g. after deploying the backend somewhere else).
-
-You do **not** need to open `index.html` directly via `file://` for chat/code to work correctly with `fetch()` in most browsers — using a local static server avoids CORS/file-protocol quirks.
-
 ## Features
 
 - **Login gate** — asks for a name before entering. Not real authentication; the name lives only in memory for that browser tab.
@@ -107,18 +63,5 @@ It's free and requires no signup, but it's a community-run service — no uptime
 - **Font**: uses Fraunces + Source Serif 4 as free stand-ins for Copernicus (a commercial typeface not available on any CDN). To use real Copernicus, drop the font files in a `fonts/` folder and uncomment/edit the `@font-face` block at the top of `style.css`.
 - **Models**: the dropdown in the top bar lists a few Groq models — edit the `<select id="modelSelect">` options in `index.html` to add/remove models.
 - **Mode limits/prompts**: edit the `MODES` object near the top of `script.js` to change per-mode system prompts or message quotas.
-
-## Deploying
-
-**Backend** — deploy `server/` to any Node host that supports environment variables:
-- **Render / Railway / Fly.io**: push the `server/` folder, set `GROQ_API_KEY` (and optionally `ALLOWED_ORIGINS`) in their dashboard, they run `npm install && npm start`.
-- **Vercel/Netlify serverless functions**: the logic in `server.js`'s `/api/chat` handler can be adapted into a single serverless function file; set `GROQ_API_KEY` as a project environment variable in their dashboard.
-
-**Frontend** — since it's static files, host `index.html`, `style.css`, `script.js` anywhere (GitHub Pages, Netlify, Vercel, S3, etc.). After deploying the backend, update `BACKEND_URL` at the top of `script.js` to the backend's real URL, and set `ALLOWED_ORIGINS` on the backend to your frontend's deployed origin so CORS only allows your site.
-
-## Known limitations
-
-- No real user accounts or authentication.
-- No persistence — closing the tab loses all chats.
 - Image mode depends on a free third-party service with no SLA.
 - Voice features depend on browser support (Web Speech API) — best in Chrome/Edge.
