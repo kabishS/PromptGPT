@@ -1,6 +1,6 @@
 # PromptGPT 🌲
 
-A single-page AI chat interface built with HTML, Bootstrap 5, and vanilla JavaScript. No backend, no database, no build step — open `index.html` and it runs.
+A single-page AI chat interface built with HTML, Bootstrap 5, and vanilla JavaScript, groq API. No backend, no database, no build step — open `index.html` and it runs.
 
 ## Files
 
